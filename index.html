@@ -1,48 +1,193 @@
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
+        <title>Get Even!</title>
+        <meta name="description" content="Pick your battle and get even! Hit the Ex, the Ex-Boss, a robot or an alien as many times as you can in 30 seconds.">
+        <meta property="og:title" content="Get Even!">
+        <meta property="og:description" content="Pick your battle and get even! Hit the Ex, the Ex-Boss, a robot or an alien as many times as you can in 30 seconds.">
+        <meta property="og:type" content="website">
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👊</text></svg>">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Patrick+Hand&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
 
         <link rel="stylesheet" href="style.css">
         <script src="script.js" defer></script>
-
-        <title>Catch the Monster</title>
     </head>
-
 
     <body>
 
-        <h1>Catch the Monster</h1>
+        <h1>Get Even!</h1>
 
-        <!--Score and timer-->
-        <div class="game-info">
-            <p>Score: <span id= "score">0</span></p>
-            <p>High Score: <span id="high-score">0</span></p>
-            <p>Time: <span id="timer">15</span></p>
-        </div>
+        <main class="layout">
 
-        <!-- Game area -->
-        <div id="game-area">
-            <div id="monster">👾</div>
-        </div>
+            <!-- Left: player + game controls -->
+            <aside class="panel controls">
+                <fieldset class="picker player">
+                    <legend>Player</legend>
+                    <div class="name-row">
+                        <button type="button" id="avatar-button" class="avatar-button" aria-label="Choose your battle">🙂</button>
+                        <input type="text" id="player-name" maxlength="14" placeholder="Your name" aria-label="Your name" autocomplete="off">
+                    </div>
+                    <button type="button" id="style-button" class="style-button">⚔️ Choose your battle</button>
+                </fieldset>
 
-        <!-- Difficulty levels -->
-        <div class="difficulty">
-            <label for="difficulty">Choose difficulty:</label>
+                <!-- the monster's replies, in a screen that matches its theme
+                     (laptop, phone, email, spaceship screen...) -->
+                <div id="messenger" class="messenger" aria-live="polite">
+                    <div class="msg-header">
+                        <span class="msg-title"></span>
+                        <span class="msg-status"></span>
+                    </div>
+                    <ul class="msg-list"></ul>
+                    <div class="msg-base" aria-hidden="true"></div>
+                </div>
 
-            <select id="difficulty">
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
-            </select>
-        </div>
+                <div class="control-buttons">
+                    <button id="start-button" class="big-button" type="button">▶ Start Game</button>
+                    <button id="new-game-button" class="big-button" type="button">🕹️ New Game</button>
+                    <button id="level-button" class="level-button" type="button">⚡ Level: Easy</button>
+                </div>
+            </aside>
 
-        <!-- Start button -->
-        <button id="start-button">Start Game</button>
+            <!-- Middle: match-up, score bar, game -->
+            <section class="panel play">
+                <p id="matchup" class="matchup"></p>
+
+                <div class="game-info">
+                    <p>Score: <span id="score">0</span></p>
+                    <p>Best: <span id="high-score">0</span><span id="high-score-by" class="by"></span></p>
+                    <p>Time: <span id="timer">30</span></p>
+                </div>
+
+                <div id="game-area">
+                    <div class="bg" aria-hidden="true"></div>
+                    <div id="monster" role="img" aria-label="monster"></div>
+                </div>
+            </section>
+
+            <!-- Right: monster & weapon selection -->
+            <aside class="panel choices">
+
+                <fieldset class="picker">
+                    <legend>Monster</legend>
+                    <div class="cards cards-monsters">
+                        <input type="radio" name="monster" id="m-classic" value="classic" checked>
+                        <label for="m-classic"><span class="card-art" data-monster="classic"></span>Classic</label>
+
+                        <input type="radio" name="monster" id="m-teddy" value="teddy">
+                        <label for="m-teddy"><span class="card-art" data-monster="teddy"></span>Teddy</label>
+
+                        <input type="radio" name="monster" id="m-robot" value="robot">
+                        <label for="m-robot"><span class="card-art" data-monster="robot"></span>Robot</label>
+
+                        <input type="radio" name="monster" id="m-alien" value="alien">
+                        <label for="m-alien"><span class="card-art" data-monster="alien"></span>Alien</label>
+
+                        <input type="radio" name="monster" id="m-ex" value="ex">
+                        <label for="m-ex"><span class="card-art" data-monster="ex"></span>The Ex</label>
+
+                        <input type="radio" name="monster" id="m-boss" value="boss">
+                        <label for="m-boss"><span class="card-art" data-monster="boss"></span>Ex-Boss</label>
+                    </div>
+                </fieldset>
+
+                <fieldset class="picker">
+                    <legend>Weapon</legend>
+                    <div class="cards cards-weapons">
+                        <input type="radio" name="weapon" id="w-heart" value="heart" checked>
+                        <label for="w-heart"><span class="card-emoji">❤️</span>Hearts</label>
+
+                        <input type="radio" name="weapon" id="w-egg" value="egg">
+                        <label for="w-egg"><span class="card-emoji">🥚</span>Egg</label>
+
+                        <input type="radio" name="weapon" id="w-punch" value="punch">
+                        <label for="w-punch"><span class="card-emoji">👊</span>Punch</label>
+
+                        <input type="radio" name="weapon" id="w-shoe" value="shoe">
+                        <label for="w-shoe"><span class="card-emoji">👟</span>Shoe</label>
+
+                        <input type="radio" name="weapon" id="w-zap" value="zap">
+                        <label for="w-zap"><span class="card-emoji">⚡</span>Zapper</label>
+
+                        <input type="radio" name="weapon" id="w-trash" value="trash">
+                        <label for="w-trash"><span class="card-emoji">🗑️</span>Trash Bag</label>
+                    </div>
+                </fieldset>
+            </aside>
+
+        </main>
+
+        <!-- Popup: ready-made battles (opponent vs monster) -->
+        <dialog id="style-dialog" class="popup" aria-labelledby="style-dialog-heading">
+            <form method="dialog">
+                <h2 id="style-dialog-heading">Choose your battle</h2>
+                <div class="opponents" role="radiogroup" aria-labelledby="style-dialog-heading"></div>
+                <button type="submit" class="done-button">Done</button>
+            </form>
+        </dialog>
+
+        <!-- Popup: difficulty level -->
+        <dialog id="level-dialog" class="popup" aria-labelledby="level-dialog-heading">
+            <form method="dialog">
+                <h2 id="level-dialog-heading">Choose your level</h2>
+                <div class="levels">
+                    <input type="radio" name="difficulty" id="d-easy" value="easy" checked>
+                    <label for="d-easy">
+                        <span class="level-dot">🟢</span>
+                        <span><b>Easy</b><small>Big monster · blocks rarely</small></span>
+                    </label>
+
+                    <input type="radio" name="difficulty" id="d-medium" value="medium">
+                    <label for="d-medium">
+                        <span class="level-dot">🟡</span>
+                        <span><b>Medium</b><small>Medium monster · blocks sometimes</small></span>
+                    </label>
+
+                    <input type="radio" name="difficulty" id="d-hard" value="hard">
+                    <label for="d-hard">
+                        <span class="level-dot">🔴</span>
+                        <span><b>Hard</b><small>Small monster · blocks often</small></span>
+                    </label>
+                </div>
+                <button type="submit" class="done-button">Done</button>
+            </form>
+        </dialog>
+
+        <!-- Popup: game over -->
+        <dialog id="game-over-dialog" class="popup game-over" aria-labelledby="game-over-message">
+            <button type="button" id="close-game-over" class="close-x" aria-label="Close">✕</button>
+            <div id="game-over-monster" class="game-over-monster"></div>
+            <h2 id="game-over-message"></h2>
+            <p id="game-over-summary" class="game-over-summary"></p>
+
+            <div class="result-row">
+                <div class="result">
+                    <span class="result-label">Score</span>
+                    <span id="final-score" class="result-value">0</span>
+                </div>
+                <div class="result">
+                    <span class="result-label">Rating</span>
+                    <span id="final-stars" class="result-value stars-value">☆☆☆</span>
+                </div>
+                <div class="result">
+                    <span class="result-label">Rank</span>
+                    <span id="final-rank" class="result-value">–</span>
+                </div>
+            </div>
+            <p id="new-high-score" class="new-high-score" hidden>🏆 New high score!</p>
+
+            <h3 id="board-heading" class="board-heading">Top 10</h3>
+            <ol id="leaderboard" class="leaderboard"></ol>
+
+            <div class="game-over-buttons">
+                <button id="play-again-button" class="big-button" type="button">▶ Play Again</button>
+                <button id="change-battle-button" class="level-button" type="button">⚔️ Change Battle</button>
+            </div>
+        </dialog>
 
     </body>
 
